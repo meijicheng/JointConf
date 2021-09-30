@@ -1,0 +1,77 @@
+---
+- hosts: "{{host}}"
+  remote_user: user-238
+  vars:
+    # required extra vars:
+    #   - host
+    #   - task_name
+    #   - task_id
+    #   - task_rep
+    ansible_sudo_pass: A!I@T#U$ning
+    db_name: janusgraph_hbase
+    apt_requirements:
+      # - libcurl4
+    deploy_home: "/home/user-238/Desktop/code/{{db_name}}/{{task_name}}"
+    data_dir: "{{deploy_home}}/data"
+    local_db_src: ../hbase-2.0.3-bin.tar.gz
+    db_src: "{{deploy_home}}/hbase-2.0.3-bin.tar.gz"
+    db_server: "{{deploy_home}}/hbase-2.0.3"
+    local_db_config_template: ../hbase-site.xml
+    log_dir: "{{db_server}}/logs"
+    db_config: "{{db_server}}/conf/hbase-site.xml"
+    db_port: 16010
+    local_result_dir: "../results/{{task_name}}"
+  pre_tasks: # set up a clean env
+    - name: stop
+      shell: "JAVA_HOME=/usr/local/jdk nohup {{db_server}}/bin/stop-hbase.sh &"
+    - name: load app_config information
+      include_vars:
+        file: "{{local_result_dir}}/{{task_id}}_app_config.yml"
+        name: app_config
+    - name: create folders
+      with_items:
+        - "{{deploy_home}}"
+        - "{{data_dir}}"
+      file:
+        path: "{{item}}"
+        state: directory
+        recurse: yes
+    - name: copy archive
+      copy:
+        src: "{{local_db_src}}"
+        dest: "{{db_src}}"
+    - name: unarchive
+      unarchive:
+        src: "{{db_src}}"
+        dest: "{{deploy_home}}"
+        remote_src: yes
+    - name: clear data
+      file:
+        path: "{{data_dir}}"
+        state: "{{item}}"
+      with_items:
+        - absent
+        - directory
+    - name: clear log
+      file:
+        path: "{{log_dir}}"
+        state: "{{item}}"
+      with_items:
+        - absent
+        - directory
+  tasks:
+    - name: copy config
+      template:
+        src: "{{local_db_config_template}}"
+        dest: "{{db_config}}"
+    - name: copy jvm config
+      template:
+        src: "../hbase-env.sh"
+        dest: "{{db_server}}/conf/hbase-env.sh"
+    - name: start
+      shell: "JAVA_HOME=/usr/local/jdk nohup {{db_server}}/bin/start-hbase.sh &"
+    - name: wait...
+      wait_for:
+        host: 127.0.0.1
+        port: "{{db_port}}"
+        delay: 6 # wait 3 seconds till it initialized?

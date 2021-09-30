@@ -1,0 +1,86 @@
+---
+  cache_db_cache_size:
+    min: 0.1
+    max: 0.9
+    float: yes
+    default: 0.3
+  cache_db_cache_clean_wait:
+    min: 25
+    max: 75
+    float: no
+    default: 50
+  cache_tx_cache_size:
+    min: 4
+    max: 12
+    float: no
+    default: 8
+  storage_read_time:
+    min: 1
+    max: 10
+    float: no
+    default: 5
+  storage_buffer_size:
+    min: 1
+    max: 20
+    float: no
+    default: 1
+  storage_page_size:
+    min: 5
+    max: 25
+    float: no
+    default: 10
+  storage_parallel_backend_ops:
+    range:
+      - 'true'
+      - 'false'
+    default: 'true'
+  ids_flush:
+    range:
+      - 'true'
+      - 'false'
+    default: 'true'
+  ids_block_size:
+    min: 1
+    max: 30
+    float: no
+    default: 10
+  ids_renew_percentage:
+    min: 0.1
+    max: 0.9
+    float: yes
+    default: 0.3
+  ids_num_partitions:
+    min: 1
+    max: 19
+    float: no
+    default: 10
+  ids_authority_wait_time:
+    min: 1
+    max: 10
+    float: no
+    default: 3
+  query_batch_property_prefetch:
+    range:
+      - 'true'
+      - 'false'
+    default: 'false'
+  query_fast_property:
+    range:
+      - 'true'
+      - 'false'
+    default: 'true'
+  query_force_index:
+    range:
+      - 'true'
+      - 'false'
+    default: 'false'
+  query_ignore_unknown_index_key:
+    range:
+      - 'true'
+      - 'false'
+    default: 'false'
+  query_smart_limit:
+    range:
+      - 'true'
+      - 'false'
+    default: 'true'

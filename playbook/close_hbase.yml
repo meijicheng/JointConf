@@ -1,0 +1,25 @@
+---
+- hosts: "{{host}}"
+  remote_user: user-238
+  vars:
+    # required extra vars:
+    #   - host
+    #   - task_name
+    #   - task_id
+    #   - task_rep
+    ansible_sudo_pass: A!I@T#U$ning
+    db_name: janusgraph_hbase
+    apt_requirements:
+      # - libcurl4
+    deploy_home: "/home/user-238/Desktop/code/{{db_name}}/{{task_name}}"
+    data_dir: "{{deploy_home}}/data"
+    local_db_src: ../hbase-2.0.3-bin.tar.gz
+    db_src: "{{deploy_home}}/hbase-2.0.3-bin.tar.gz"
+    db_server: "{{deploy_home}}/hbase-2.0.3"
+    local_db_config_template: ../hbase-site.xml
+    db_config: "{{db_server}}/conf/hbase-site.xml"
+    db_port: 16010
+    local_result_dir: "../results/{{task_name}}"
+  tasks:
+    - name: stop
+      shell: "JAVA_HOME=/usr/local/jdk nohup {{db_server}}/bin/stop-hbase.sh &"

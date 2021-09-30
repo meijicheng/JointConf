@@ -1,0 +1,101 @@
+---
+  hbase_client_max_perregion_tasks:
+    min: 1
+    max: 5
+    float: no
+    default: 1
+  hbase_client_max_perserver_tasks:
+    min: 4
+    max: 20
+    float: no
+    default: 2
+  hfile_block_cache_size:
+    min: 0.1
+    max: 0.6
+    float: yes
+    default: 0.4
+  hfile_index_block_max_size:
+    min: 1
+    max: 10
+    float: no
+    default: 2
+  hbase_regionserver_handler_count:
+    min: 20
+    max: 80
+    float: no
+    default: 30
+  hbase_ipc_server_callqueue_handler_factor:
+    min: 0.0
+    max: 1.0
+    float: yes
+    default: 0.1
+  hbase_hstore_blockingStoreFiles:
+    min: 5
+    max: 20
+    float: no
+    default: 16
+  heap_size:
+    min: 1
+    max: 16
+    float: no
+    default: 1
+  hbase_ipc_server_callqueue_read_ratio:
+    min: 0.0
+    max: 1.0
+    float: yes
+    default: 0.0
+  hbase_ipc_server_callqueue_scan_ratio:
+    min: 0.0
+    max: 1.0
+    float: yes
+    default: 0.0
+  hbase_hregion_memstore_flush_size:
+    min: 4
+    max: 32
+    float: no
+    default: 8
+  io_storefile_bloom_block_size:
+    min: 1
+    max: 10
+    float: no
+    default: 2
+  hbase_hstore_compactionThreshold:
+    min: 3
+    max: 6
+    float: no
+    default: 3
+  hbase_storescanner_parallel_seek_threads:
+    min: 4
+    max: 20
+    float: no
+    default: 10
+  hbase_regionserver_global_memstore_upperLimit:
+    min: 0.10
+    max: 0.60
+    float: yes
+    default: 0.40
+  hbase_regionserver_global_memstore_lowerLimit:
+    min: 0.10
+    max: 0.60
+    float: yes
+    default: 0.35
+  hfile_block_index_cacheonwrite:
+    range:
+      - 'true'
+      - 'false'
+    default: 'false'
+  hfile_block_bloom_cacheonwrite:
+    range:
+      - 'true'
+      - 'false'
+    default: 'false'
+  hbase_rs_cacheblocksonwrite:
+    range:
+      - 'true'
+      - 'false'
+    default: 'false'
+  hbase_storescanner_parallel_seek_enable:
+    range:
+      - 'true'
+      - 'false'
+    default: 'false'

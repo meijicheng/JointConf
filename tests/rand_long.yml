@@ -1,0 +1,17 @@
+---
+  # task_name: TODO
+  target: mongodb
+  hosts:
+    # tester: TODO
+    # testee: TODO
+  workload: stress
+  exist:
+  tune_os: yes
+  tune_app: yes
+  optimizer:
+    name: rand
+    iter_limit: 50
+    reboot_interval: 5
+    repitition: 2
+  clients: 1024
+  tester: ycsb

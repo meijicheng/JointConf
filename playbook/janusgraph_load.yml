@@ -1,0 +1,56 @@
+---
+- hosts: "{{host}}"
+  vars:
+    # required extra vars:
+    #   - host
+    #   - target
+    #   - task_name
+    #   - task_id
+    #   - task_rep
+    #   - workload_path
+    ansible_sudo_pass: A!I@T#U$ning
+    db_name: janusgraph_hbase
+    apt_requirements:
+    tester_home: "/home/user-237/Desktop/code/{{db_name}}/{{task_name}}"
+    local_janusgraph_zip: "../janusgraph_benchmark.zip"
+    local_result_dir: "../results/{{task_name}}"
+    local_db_config_template: ../janusgraph-hbase-load.properties
+    db_server: "{{tester_home}}/janusgraph_benchmark"
+    db_config: "{{db_server}}/conf/janusgraph-hbase.properties"
+    load_result_path: "{{db_server}}/results/{{task_id}}_load_result"
+  remote_user: user-237
+  pre_tasks:
+    - name: create folders
+      with_items:
+        - "{{tester_home}}"
+      file:
+        path: "{{item}}"
+        state: directory
+        recurse: yes
+    - name: load app_config information
+      include_vars:
+        file: "{{local_result_dir}}/{{task_id}}_app_config.yml"
+        name: app_config
+    - name: copy janusgraph package
+      copy:
+        src: "{{local_janusgraph_zip}}"
+        dest: "{{tester_home}}/janusgraph_benchmark.zip"
+    - name: unarchive janusgraph
+      unarchive:
+        dest: "{{tester_home}}"
+        src: "{{tester_home}}/janusgraph_benchmark.zip"
+        remote_src: yes
+    - name: copy janusgraph-hbase.properties config
+      template:
+        src: "{{local_db_config_template}}"
+        dest: "{{db_config}}"
+    - name: janusgraph load pre
+      shell: "chmod 777 {{db_server}}/bin/load.sh"
+  tasks:
+    - name: janusgraph load
+      shell: "{{db_server}}/bin/load.sh {{db_server}} > {{load_result_path}}"
+    - name: fetch load result
+      fetch:
+        src: "{{load_result_path}}"
+        dest: "{{local_result_dir}}/{{task_id}}_load_result"
+        flat: yes

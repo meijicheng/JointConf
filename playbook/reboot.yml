@@ -1,0 +1,25 @@
+---
+- hosts: "{{host}}"
+  remote_user: "{{user}}"
+  vars:
+    # required extra vars:
+    #   - host
+    #   - task_name
+    #   - task_id
+    #   - task_rep
+    ansible_sudo_pass: A!I@T#U$ning
+    db_name: janusgraph_hbase
+    deploy_home: "/home/{{user}}/Desktop/code/{{db_name}}"
+  pre_tasks: # set up a clean env
+    - name: clear data
+      file:
+        path: "{{deploy_home}}"
+        state: "{{item}}"
+      with_items:
+        - absent
+        - directory
+  #tasks:
+    #- name: reboot machine
+     # reboot:
+      #  post_reboot_delay: 30
+     # become: yes
